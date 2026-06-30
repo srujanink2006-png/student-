@@ -1,0 +1,84 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+class Dashboard extends JFrame {
+
+    Dashboard(String role) {
+
+        setTitle("Employee Payroll Dashboard");
+        setSize(750, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBackground(new Color(245, 248, 255));
+
+        // Title
+        JLabel title = new JLabel("PAYROLL DASHBOARD");
+        title.setFont(new Font("Arial", Font.BOLD, 26));
+        title.setBounds(220, 20, 400, 40);
+        panel.add(title);
+
+        // Buttons with Icons
+        JButton add = createButton("Add Employee", "add.png", 80, 120);
+        JButton search = createButton("Search Employee", "search.png", 280, 120);
+        JButton payslip = createButton("Generate Payslip", "payslip.png", 480, 120);
+        JButton logout = createButton("Logout", "logout.png", 280, 300);
+
+        panel.add(add);
+        panel.add(search);
+        panel.add(payslip);
+        panel.add(logout);
+
+        // Role-based access control
+        if (!role.equals("ADMIN")) {
+            add.setEnabled(false);
+        }
+
+        if (role.equals("EMPLOYEE")) {
+            search.setEnabled(false);
+            payslip.setEnabled(false);
+        }
+
+        // Actions
+        logout.addActionListener(e -> {
+            dispose();
+            new LoginPage();
+        });
+
+        add(panel);
+        setVisible(true);
+    }
+
+    // Reusable button creator with icon
+    private JButton createButton(String text, String iconPath, int x, int y) {
+
+        ImageIcon icon = new ImageIcon(iconPath);
+        Image img = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+        icon = new ImageIcon(img);
+
+        JButton btn = new JButton(text, icon);
+
+        btn.setBounds(x, y, 180, 120);
+        btn.setFont(new Font("Arial", Font.BOLD, 13));
+        btn.setFocusPainted(false);
+        btn.setBackground(Color.WHITE);
+        btn.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        // Hover effect
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                btn.setBackground(new Color(220, 235, 255));
+            }
+
+            public void mouseExited(MouseEvent e) {
+                btn.setBackground(Color.WHITE);
+            }
+        });
+
+        return btn;
+    }
+}
